@@ -59,6 +59,10 @@ public class Main
 			.append( "event" )
 			.append( "," )
 			.append( "distance" )
+			.append( "," )
+			.append( "ageGroup" )
+			.append( "," )
+			.append( "eventName" )
 			.append( "\n" );
 		String headers = sb.toString();
 		tryWrite( headers, output );
@@ -155,8 +159,23 @@ public class Main
 							tryWrite( sex, output );
 							tryWrite( ",", output );
 							tryWrite( header, output );
+
+							Event event = EventParser.parse( header );
+
 							tryWrite( ",", output );
-							tryWrite( tryParseDistanceFromStroke( header ), output );
+							if ( event != null ) tryWrite( event.getDistance() == null ? "" : String.valueOf( event.getDistance() ), output );
+							tryWrite( ",", output );
+							if ( event != null ) {
+								Integer ageMin = event.getAgeMin();
+								Integer ageMax = event.getAgeMax();
+								if ( ageMin != null && ageMax != null )
+								{
+									String ageGroup = ageMin + "-" + ageMax;
+									tryWrite( ageGroup, output );
+								}
+							}
+							tryWrite( ",", output );
+							if ( event != null ) tryWrite( event.getName() == null ? "" : String.valueOf( event.getName() ), output );
 							tryWrite( "\n", output );
 						}
 						System.out.println( "\n" );
